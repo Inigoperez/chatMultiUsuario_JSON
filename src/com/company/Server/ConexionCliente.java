@@ -1,9 +1,10 @@
 package com.company.Server;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.net.Socket;
-import java.util.List;
 
 public class ConexionCliente extends Thread{
 
@@ -48,6 +49,20 @@ public class ConexionCliente extends Thread{
             BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             String linea;
+            System.out.println("error -1");
+            while(!(linea = br.readLine()).equals("Terminar")){
+            //while((linea = br.readLine()) != "Terminar"){
+                System.out.println("error 0");
+                JSONParser parser = new JSONParser();
+                System.out.println("error 1"+ linea);
+                JSONObject msg = (JSONObject) parser.parse(linea);
+                System.out.println("error 2 "+msg);
+                Server.controladorMSG(msg);
+            }
+
+            /*BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            String linea;
             while((linea = br.readLine()) != null){
                 String[] datos = linea.split("\\|");
                 JSONObject msg = new JSONObject();
@@ -70,8 +85,8 @@ public class ConexionCliente extends Thread{
                 bw_json.close();
 
                 Server.controladorMSG(msg);
-            }
-        } catch (IOException exception) {
+            }*/
+        } catch (IOException | ParseException exception) {
             exception.printStackTrace();
         }
     }

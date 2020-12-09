@@ -23,37 +23,42 @@ public class HiloEscritura extends Thread{
     public void run() {
         String linea;
 
-        while (nombre == null) {
-            linea = sc.nextLine();
-            try {
-                outWrite.write(linea);
-                outWrite.newLine();
-                outWrite.flush();
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-        }
+        while (!(linea = sc.nextLine()).equals("terminar")) {
+            if(this.nombre == null){
 
-        while ((linea = sc.nextLine()) != "terminar") {
-            String[] datos = linea.split("\\|");
-            JSONObject msg = new JSONObject();
-            if (datos.length == 1) {
-                msg.put("from", this.nombre);
-                msg.put("to", "all");
-                msg.put("ms", datos[0]);
-            } else if (datos[0] == "all") {
-                msg.put("from", this.nombre);
-                msg.put("to", datos[0]);
-                msg.put("ms", datos[1]);
-            } else {
-                msg.put("from", this.nombre);
-                msg.put("to", datos[0]);
-                msg.put("ms", datos[1]);
-            }
-            try {
-                outObj.writeObject(msg);
-            } catch (IOException exception) {
-                exception.printStackTrace();
+                this.nombre = linea;
+
+                try {
+                    outWrite.write(linea);
+                    outWrite.newLine();
+                    outWrite.flush();
+                    System.out.println("Tu usuario es : "+this.nombre);
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+            }else {
+
+                String[] datos = linea.split("\\|");
+                JSONObject msg = new JSONObject();
+                if (datos.length == 1) {
+                    msg.put("from", this.nombre);
+                    msg.put("to", "all");
+                    msg.put("ms", datos[0]);
+                } else if (datos[0].equals("all")) {
+                    msg.put("from", this.nombre);
+                    msg.put("to", datos[0]);
+                    msg.put("ms", datos[1]);
+                } else {
+                    msg.put("from", this.nombre);
+                    msg.put("to", datos[0]);
+                    msg.put("ms", datos[1]);
+                }
+                try {
+                    outObj.writeObject(msg.toJSONString());
+                    System.out.println(msg.toJSONString());
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
             }
         }
     }
