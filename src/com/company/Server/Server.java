@@ -12,7 +12,7 @@ public class Server {
     private static ArrayList<ConexionCliente> clientesConectados = new ArrayList();
 
     public static void controladorMSG(JSONObject msg){
-        if(msg.get("to")=="all"){
+        if(msg.get("to").equals("all")){
             for(ConexionCliente cliente : clientesConectados){
                 if(msg.get("from")!=cliente.nombre){
                     if(cliente.nombre != null){
@@ -20,12 +20,17 @@ public class Server {
                     }
                 }
             }
+            System.out.println("From:"+msg.get("from"));
+            System.out.println("To:"+msg.get("to"));
+            System.out.println("Msg:"+msg.get("ms"));
+            System.out.println("------------------------");
         }else{
             for(ConexionCliente cliente : clientesConectados){
                 System.out.println("From:"+msg.get("from"));
                 System.out.println("To:"+msg.get("to"));
                 System.out.println("Msg:"+msg.get("ms"));
-                if(msg.get("from") !=cliente.nombre & msg.get("to").equals(cliente.nombre)){
+                System.out.println("------------------------");
+                if(msg.get("to").equals(cliente.nombre)){
                     cliente.enviarMensaje(msg.get("ms").toString(),msg.get("from").toString());
                 }
             }
@@ -43,7 +48,7 @@ public class Server {
             while (true) {
                 Socket socket = servidor.accept();
                 System.out.println("Conexion realizada");
-
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 ConexionCliente cc = new ConexionCliente(socket);
                 cc.start();
                 clientesConectados.add(cc);

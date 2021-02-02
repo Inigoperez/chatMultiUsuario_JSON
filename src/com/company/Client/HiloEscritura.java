@@ -23,11 +23,9 @@ public class HiloEscritura extends Thread{
     public void run() {
         String linea;
 
-        while (!(linea = sc.nextLine()).equals("terminar")) {
+        while ((!(linea = sc.nextLine()).equals("terminar"))&&(!(linea.equals(null)))) {
             if(this.nombre == null){
-
                 this.nombre = linea;
-
                 try {
                     outWrite.write(linea);
                     outWrite.newLine();
@@ -37,7 +35,6 @@ public class HiloEscritura extends Thread{
                     exception.printStackTrace();
                 }
             }else {
-
                 String[] datos = linea.split("\\|");
                 JSONObject msg = new JSONObject();
                 if (datos.length == 1) {
