@@ -12,6 +12,7 @@ public class Server {
     private static ArrayList<ConexionCliente> clientesConectados = new ArrayList();
 
     public static void controladorMSG(JSONObject msg){
+        System.out.println(msg);
         if(msg.get("to").equals("all")){
             for(ConexionCliente cliente : clientesConectados){
                 if(msg.get("from")!=cliente.nombre){
@@ -20,21 +21,17 @@ public class Server {
                     }
                 }
             }
-            System.out.println("From:"+msg.get("from"));
-            System.out.println("To:"+msg.get("to"));
-            System.out.println("Msg:"+msg.get("ms"));
-            System.out.println("------------------------");
         }else{
             for(ConexionCliente cliente : clientesConectados){
-                System.out.println("From:"+msg.get("from"));
-                System.out.println("To:"+msg.get("to"));
-                System.out.println("Msg:"+msg.get("ms"));
-                System.out.println("------------------------");
                 if(msg.get("to").equals(cliente.nombre)){
                     cliente.enviarMensaje(msg.get("ms").toString(),msg.get("from").toString());
                 }
             }
         }
+        System.out.println("From:"+msg.get("from"));
+        System.out.println("To:"+msg.get("to"));
+        System.out.println("Msg:"+msg.get("ms"));
+        System.out.println("------------------------");
     }
 
     public static void main(String[] args) {
